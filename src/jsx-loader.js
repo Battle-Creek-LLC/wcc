@@ -424,6 +424,11 @@ export function parseJsx(moduleURL) {
           declaration.id.name
         ) {
           componentName = declaration.id.name;
+        } else if (declaration && declaration.type === 'Identifier' && declaration.name) {
+          // also resolve the class name for the `class X {}; export default X;` form so the
+          // static-injection gate and the effect-append pass share one name (avoids `undefined.$$tmpl0`)
+          // https://github.com/ProjectEvergreen/wcc/issues/<TBD>
+          componentName = declaration.name;
         }
       },
       ClassDeclaration(node) {
