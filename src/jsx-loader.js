@@ -409,8 +409,10 @@ export function parseJsx(moduleURL) {
         ) {
           // @ts-ignore
           if (declaration.declarations[0].id.name === 'inferredObservability') {
+            // use the parsed literal value, not its raw source text, so `= false` / `0` / `null` opt out
+            // https://github.com/ProjectEvergreen/wcc/issues/<TBD>
             // @ts-ignore
-            inferredObservability = Boolean(node.declaration.declarations[0].init.raw);
+            inferredObservability = node.declaration.declarations[0].init.value === true;
           }
         }
       },
